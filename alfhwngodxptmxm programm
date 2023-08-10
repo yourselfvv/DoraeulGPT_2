@@ -1,0 +1,25 @@
+def solution(n, m, tests):
+    answer = set()
+    for x in range(n + 1):
+        for y in range(m + 1):
+            answer.add((x, y))
+    
+    for x, y, d, flag in tests:
+        reachable = set()
+        for i in range(d + 1):
+            for j in range(d + 1 - i):
+                if 0 <= x + i <= n and 0 <= y + j <= m:
+                    reachable.add((x + i, y + j))
+                if 0 <= x - i <= n and 0 <= y + j <= m:
+                    reachable.add((x - i, y + j))
+                if 0 <= x + i <= n and 0 <= y - j <= m:
+                    reachable.add((x + i, y - j))
+                if 0 <= x - i <= n and 0 <= y - j <= m:
+                    reachable.add((x - i, y - j))
+        
+        if flag == 1:
+            answer = answer & reachable
+        else: 
+            answer = answer - reachable
+    
+    return len(answer)
