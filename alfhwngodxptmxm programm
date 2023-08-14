@@ -1,25 +1,20 @@
 def solution(n, m, tests):
-    answer = set()
-    for x in range(n + 1):
-        for y in range(m + 1):
-            answer.add((x, y))
+    answer = {(x , y) for y in range(m + 1) for x in range(n + 1)}
     
     for x, y, d, flag in tests:
         reachable = set()
-        for i in range(d + 1):
-            for j in range(d + 1 - i):
-                if 0 <= x + i <= n and 0 <= y + j <= m:
-                    reachable.add((x + i, y + j))
-                if 0 <= x - i <= n and 0 <= y + j <= m:
-                    reachable.add((x - i, y + j))
-                if 0 <= x + i <= n and 0 <= y - j <= m:
-                    reachable.add((x + i, y - j))
-                if 0 <= x - i <= n and 0 <= y - j <= m:
-                    reachable.add((x - i, y - j))
+        min_x = max(0, x - d)
+        max_x = min(n, x + d)
+        min_y = max(0, y - d)
+        max_y = min(m, y + d)
+        for new_x in range(min_x, max_x + 1):
+            for new_y in range(min_y, max_y + 1):
+                if abs(new_x - x) + abs(new_y - y) <= d:
+                    reachable.add((new_x, new_y))
         
         if flag == 1:
-            answer = answer & reachable
-        else: 
-            answer = answer - reachable
+            answer.intersection_update(reachable)
+        else:
+            answer.difference_update(reachable)
     
     return len(answer)
